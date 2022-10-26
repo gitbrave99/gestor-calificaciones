@@ -1,4 +1,3 @@
-from itertools import count
 from openpyxl import Workbook, workbook
 from openpyxl.drawing.image import Image
 
