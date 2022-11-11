@@ -86,7 +86,8 @@ class ConGrado(Conexion):
             cursor = conn.cursor()
             cursor.execute(sql)
             grados = cursor.fetchall()
-            print("recargando")
+            print("recargando= ")
+            print(grados)
             return grados
         except Error as e:
             print("ERROR LISTAR gradoS "+str(e))

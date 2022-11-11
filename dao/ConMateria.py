@@ -174,7 +174,7 @@ class ConMateria(Conexion):
             if conn:
                 cursor.close()
                 conn.close()
-
+    
     def listar_materia_segun_ciclo(self, id):
         conn = self.get_connection()
         sql = f"SELECT materia FROM materia WHERE ciclo ={id} ORDER BY materia ASC "

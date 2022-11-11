@@ -1,5 +1,3 @@
-
-
 from PySide2.QtWidgets import QMainWindow, QTableWidgetItem, QFileDialog
 from views.MainView import Ui_MainWindow
 from dao.Congrado import ConGrado
@@ -19,6 +17,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         self.conm = ConMateria()
         self.conest = ConEstudiante()
         self.connot = ConNotas()
+
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # CARGAS POR DEFECTO
@@ -26,7 +25,6 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         # self.cargar_grados_materias(self.cong.listar_grados())
         # carga por defecto de notas
         # self.cargar_calificaciones(self.connot.listar_calificaciones_segun_periodo('I'))
-
         self.llenarCbxRegistroEstudiante(self.cong.listar_grados_combobox())
         # self.llenarCbxRegistroMaterias(self.conm.listar_materia())
         # BOTON BORRAR BASE DE DTOS
@@ -36,6 +34,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
 
 # GENERAR EXCEL
         self.btnExportExcel.clicked.connect(self.generarExcel)
+        self.cargarDefaulMateriasACalificar()
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -48,17 +47,17 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         self.btnCancelMateriaEdit.clicked.connect(self.cancelarEditarMateria)
         self.btnEliminarMateria.clicked.connect(self.eliminarMateria)
         self.btnRefreshMaterias.clicked.connect(self.regarcarMaterias)
-        
+
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
     # CONEcCION DE BOTONES  DE REGISTRO DEGRADOS
         self.tblListGrados.selectionModel().selectionChanged.connect(
             self.mostrar_estudiantes_segun_grado)
-            
+
         self.btnAgregarGrado.clicked.connect(self.agregar_grado)
         self.btnGradoEdit.clicked.connect(self.selectGradoAEditar)
-        
+
         self.txtSearchGrado.textChanged.connect(self.buscarGrado)
         self.btnGradoEliminar.clicked.connect(self.eliminarGrado)
         self.btnActualizarGrado.clicked.connect(self.actualizarGrado)
@@ -73,8 +72,8 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         self.btnCancelEstud.clicked.connect(self.cancelarEditarEstudiante)
         self.btnAgregarEstud.clicked.connect(self.agregarEstudiante)
         self.cbxVerEstudiantesDeRegEst.currentTextChanged.connect(
-            self.verEstudianteDeGradosCalificando) 
-        
+            self.verEstudianteDeGradosCalificando)
+
         self.txtBuscarEstuds.textChanged.connect(
             self.buscarEstudianteEnRegistroPorGrado)
         self.btnRefreshEstudiantes.clicked.connect(self.regarcarEstudiantes)
@@ -83,38 +82,92 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         self.btnEditSelectEstud.clicked.connect(self.selectEstudianteEdit)
         self.btnActualizarEstud.clicked.connect(self.actualizarEstudiante)
 
+        self.btnVerNotasEstudiante.clicked.connect(
+            self.vetNotasGeneralEstudiante)
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 # CONEcCION DE BOTONES  DE REGISTRO DE NOTAS CALIFIACIONES
-        self.txtBuscarRegistroNota.textChanged.connect(self.buscarEstudianteCalicando)
+        self.txtBuscarRegistroNota.textChanged.connect(
+            self.buscarEstudianteCalicando)
         self.cbxCalifGrados.currentTextChanged.connect(
             self.verEstudiantesACalificarPorGrado)
         self.cbxVerNotasPeriodo.currentTextChanged.connect(
             self.verEstudiantesACalificarPorGradoPeriodo)
-        self.cbxVerMateriaPeriodo.currentTextChanged.connect(self.verEstudiantesACalificarPorGradoPeriodoMateria)
+        self.cbxVerMateriaPeriodo.currentTextChanged.connect(
+            self.verEstudiantesACalificarPorGradoPeriodoMateria)
         self.btnAgregarNota.clicked.connect(self.agregarCalificacion)
         self.btnEliminarRegistroNota.clicked.connect(self.eliminarNota)
         self.btnRefreshRegistroNotas.clicked.connect(self.refreshRegistroNotas)
-        self.btnEditarCalifSelectEstudiante.clicked.connect(self.selectNotaEstudianteEditar)
+        self.btnEditarCalifSelectEstudiante.clicked.connect(
+            self.selectNotaEstudianteEditar)
         self.btnCancelEditNota.clicked.connect(self.cancelarEditarNota)
         self.btnActualizarNota.clicked.connect(self.actualizarCalificacion)
-        self.tblListRegistroNotas.selectionModel().selectionChanged.connect(self.mostrar_estudiantes_calificar)
+        self.tblListRegistroNotas.selectionModel().selectionChanged.connect(
+            self.mostrar_estudiantes_calificar)
+        self.cargaalgo()
 
+    def cargaalgo(self):
+        i = 0
+        item = ""
+        gradosec = str(self.cbxCalifGrados.currentText())
+        grado = gradosec[0:-2].strip()
+        seccion = gradosec[-1:]
+        pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
+        pidG = str(pidG[1:-2])
+        self.cbxVerNotasPeriodo.clear()
 
-#BORRAR DATOS
+        liTrimestres = ["I", "II", "III", "IIII"]
+        lenTri = 3
+        if pidG is not None:
+            if pidG != 'o':
+                if "bachillerato" in grado.lower():
+                    lenTri = 4
+                while i < lenTri:
+                    item = str(liTrimestres[i])
+                    # print(f'item: {item}')
+                    self.cbxVerNotasPeriodo.addItem(item)
+                    i = i + 1
+
+# BORRAR DATOS
     def borrarBaseDatos(self):
         from controllers.ConfirmDelete_controller import ConfirmDeletec
         window = ConfirmDeletec(self)
         window.show()
         window.lblTablaaEliminar.setText('borrarall')
-#BORRAR EXCEL
+
+    def vetNotasGeneralEstudiante(self):
+        from controllers.VerNotas_controller import VerNotasc
+        index = (self.tblListRegistroNotas.selectionModel().currentIndex())
+        idEstudiante = index.sibling(index.row(), 1).data()
+        nombrees = index.sibling(index.row(), 2).data()
+        if idEstudiante is not None:
+            window = VerNotasc(self)
+            window.show()
+            gradosec = str(self.cbxCalifGrados.currentText())
+            window.txtGradoEstudiante.setText(gradosec)
+            window.txtEstudNotasDe.setText(nombrees)
+            self.cargar_table_libretaNotas(
+                window, self.connot.listarNotasTipoLibreta(idEstudiante))
+
+    def cargar_table_libretaNotas(self, viewTblLibretaNotas, listNotasGlobales):
+        viewTblLibretaNotas.tblNotasGlobales.setRowCount(
+            len(listNotasGlobales))
+
+        for (index_row, row) in enumerate(listNotasGlobales):
+            for (index_cell, cell) in enumerate(row):
+                viewTblLibretaNotas.tblNotasGlobales.setItem(
+                    index_row, index_cell, QTableWidgetItem(str(cell)))
+
+
+# BORRAR EXCEL
+
     def generarExcel(self):
         # file_path = QFileDialog.getExistingDirectory()
-        #obtener ruta para guardar excel y el nombre
+        # obtener ruta para guardar excel y el nombre
         # file_path= QFileDialog.getSaveFileName()[0]
-        file_path= QFileDialog.getSaveFileName(self,'Guardar como','')
+        file_path = QFileDialog.getSaveFileName(self, 'Guardar como', '')
         print(f'path= {file_path[0]}')
-        ex= MetodosExcel()
+        ex = MetodosExcel()
         ex.crearBook()
         ex.hojaDefault()
         # ex.crearPlantillaNotas()
@@ -124,17 +177,17 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         seccion = gradosec[-1:]
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = str(pidG[1:-2])
-        profesor=self.txtCalifProfesor.text()
-        asignatura=str(self.cbxVerMateriaPeriodo.currentText())
+        profesor = self.txtCalifProfesor.text()
+        asignatura = str(self.cbxVerMateriaPeriodo.currentText())
         periodo = str(self.cbxVerNotasPeriodo.currentText())
         mat = str(self.cbxVerMateriaPeriodo.currentText())
         if pidG is not None:
             pidG = int(pidG)
             list = self.connot.listar_calificaciones_segun_idGrado_periodo_materia(
                 pidG, periodo, mat)
-        
-        ex.crearPlantillaNotasExcel(list,grado,profesor,asignatura,periodo)
-        pathname=file_path[0]+".xlsx"
+
+        ex.crearPlantillaNotasExcel(list, grado, profesor, asignatura, periodo)
+        pathname = file_path[0]+".xlsx"
         ex.guardarArchivo(pathname)
 
 # ***************************************************************************
@@ -143,19 +196,18 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         tbNota = (self.tblListRegistroNotas.selectionModel().currentIndex())
         estCalf = str(tbNota.sibling(tbNota.row(), 2).data())
         self.txtCalifEstudiante.setText(estCalf)
-        
 
     def actualizarCalificacion(self):
         nota1 = float(self.cbxActI.value())
         nota2 = float(self.cbxActII.value())
         nota3 = float(self.cbxActIII.value())
-        idCaf= int(self.txtidCalificacion.text())
+        idCaf = int(self.txtidCalificacion.text())
         index = (self.tblListRegistroNotas.selectionModel().currentIndex())
         idCalificacion = int(str(index.sibling(index.row(), 0).data()))
         if idCalificacion is not None:
             calificacion = (nota1, nota2, nota3)
             print(calificacion)
-            if self.connot.actualizar_notaTercerCiclo(calificacion,idCaf):
+            if self.connot.actualizar_notaTercerCiclo(calificacion, idCaf):
                 self.refreshRegistroNotas()
                 print("CALIFICAION agregada")
                 self.cbxActI.setValue(0)
@@ -169,6 +221,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         self.btnCancelEditNota.setEnabled(False)
         self.btnAgregarNota.setEnabled(True)
     # SELECIONAR ESTUDIANTE NOTA A EDITAR
+
     def selectNotaEstudianteEditar(self):
         index = (self.tblListRegistroNotas.selectionModel().currentIndex())
         idCalificacion = index.sibling(index.row(), 0).data()
@@ -181,7 +234,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             self.cbxActII.setValue(float(act2))
             self.cbxActIII.setValue(float(act3))
             self.txtidCalificacion.setText(idCalificacion)
-            nperiodo= self.cbxVerNotasPeriodo.currentIndex()
+            nperiodo = self.cbxVerNotasPeriodo.currentIndex()
             self.cbxCalifPeriodo.setCurrentIndex(nperiodo)
             materia = self.cbxVerMateriaPeriodo.currentIndex()
             self.cbxCalifMateria.setCurrentIndex(materia)
@@ -189,7 +242,8 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             self.btnActualizarNota.setEnabled(True)
             self.btnCancelEditNota.setEnabled(True)
             self.btnAgregarNota.setEnabled(False)
-    #ELIMINAR NOTA
+    # ELIMINAR NOTA
+
     def eliminarNota(self):
         from controllers.ConfirmDelete_controller import ConfirmDeletec
         index = (self.tblListRegistroNotas.selectionModel().currentIndex())
@@ -200,7 +254,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             window.lblIdRegAeliminar.setText(str(idNota))
             window.lblTablaaEliminar.setText('nota')
             self.refreshRegistroNotas()
-        
+
     def refreshRegistroNotas(self):
         gradosec = str(self.cbxCalifGrados.currentText())
         grado = gradosec[0:-2].strip()
@@ -208,23 +262,25 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = str(pidG[1:-2])
         if pidG is not None:
-            if pidG !='o':
+            if pidG != 'o':
                 mat = str(self.cbxVerMateriaPeriodo.currentText())
+                trimestre = str(self.cbxVerNotasPeriodo.currentText())
                 pidG = int(pidG)
                 list = self.connot.listar_calificaciones_segun_idGrado_periodo_materia(
-                    pidG, 'I', mat)
-                print(list)
+                    pidG, trimestre, mat)
+                self.cargaalgo()
                 self.cargar_calificaciones(list)
 
     # OPERACION DE NOTAS CALIFICACIONES
-    def buscarEstudianteCalicando(self,estudiante):
+
+    def buscarEstudianteCalicando(self, estudiante):
         gradosec = str(self.cbxCalifGrados.currentText())
         grado = gradosec[0:-2].strip()
         seccion = gradosec[-1:]
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = str(pidG[1:-2])
         if pidG is not None:
-            if pidG !='o':
+            if pidG != 'o':
                 print(pidG)
 
                 pidG = int(pidG)
@@ -232,7 +288,8 @@ class MainViewc(QMainWindow, Ui_MainWindow):
                 periodo = str(self.cbxVerNotasPeriodo.currentText())
                 materia = str(self.cbxVerMateriaPeriodo.currentText())
 
-                tbOrder=self.connot.buscar_estudiante_calificando(pidG,periodo,materia,estudiante)
+                tbOrder = self.connot.buscar_estudiante_calificando(
+                    pidG, periodo, materia, estudiante)
 
                 self.cargar_calificaciones(tbOrder)
 
@@ -249,7 +306,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         if idCalificacion is not None:
             calificacion = (nota1, nota2, nota3)
             print(calificacion)
-            if self.connot.actualizar_notaTercerCiclo(calificacion,idCalificacion):
+            if self.connot.actualizar_notaTercerCiclo(calificacion, idCalificacion):
                 self.refreshRegistroNotas()
                 print("CALIFICAION agregada")
                 self.cbxActI.setValue(0)
@@ -258,7 +315,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
 
     def verEstudiantesACalificarPorGradoPeriodoMateria(self, materia):
         # OBTENEMOS ID GRADO
-        if materia !="":
+        if materia != "":
             gradosec = str(self.cbxCalifGrados.currentText())
             grado = gradosec[0:-2].strip()
             seccion = gradosec[-1:]
@@ -300,44 +357,59 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = str(pidG[1:-2])
         if pidG is not None:
-            if pidG !='o':
+            if pidG != 'o':
                 pidG = int(pidG)
                 mat = str(self.cbxVerMateriaPeriodo.currentText())
-
-                print(type(mat))
-                print(f"materia={mat}")
+                trimestre = str(self.cbxVerNotasPeriodo.currentText())
                 list = self.connot.listar_calificaciones_segun_idGrado_periodo_materia(
-                    pidG, 'I', mat)
+                    pidG, trimestre, mat)
                 print(list)
                 self.cargar_calificaciones(list)
-                cicle=1
-                if  grado.lower() =="bachillerato":
-                    cicle=2
-                if grado.lower() =="preparatoria":
-                    cicle=0
-                
-                self.llenarCbxRegistroMaterias(self.conm.listar_materia_segun_ciclo(cicle))
+                cicle = 1
+                if grado.lower() == "bachillerato":
+                    cicle = 2
+                if grado.lower() == "preparatoria":
+                    cicle = 0
+                self.cargaalgo()
+                self.llenarCbxRegistroMaterias(
+                    self.conm.listar_materia_segun_ciclo(cicle))
 
+    def cargarDefaulMateriasACalificar(self):
+
+        gradosec = str(self.cbxCalifGrados.currentText())
+        grado = gradosec[0:-2].strip()
+        seccion = gradosec[-1:]
+        pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
+        pidG = str(pidG[1:-2])
+        if pidG is not None:
+            if pidG != 'o':
+                print(f"d:{grado.lower()}")
+                cicle = 1
+                if grado.lower() == "bachillerato" or grado.lower() == "bachillerato general":
+                    cicle = 2
+                if grado.lower() == "preparatoria":
+                    cicle = 0
+                self.llenarCbxRegistroMaterias(
+                    self.conm.listar_materia_segun_ciclo(cicle))
 
 # ***************************************************************************
     # OPERACION DE ESTUDIANTES
 
     def cargarEstudiantesDGradosDefault(self):
-        gradosec=str(self.cbxVerEstudiantesDeRegEst.currentText())
+        gradosec = str(self.cbxVerEstudiantesDeRegEst.currentText())
         grado = gradosec[0:-2].strip()
         seccion = gradosec[-1:]
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = pidG[1:-2]
-            
+
         if pidG is not None:
-            if pidG!='o':
+            if pidG != 'o':
                 list = self.conest.listar_estudiantes_segun_grado(pidG)
                 self.cargar_Estudiantes_segun_grado_calificando(list)
 
-
     def actualizarEstudiante(self):
         nombre = self.txtRegNomEstud.text()
-        if nombre.strip()!="":
+        if nombre.strip() != "":
             nie = self.txtRegNieEstud.text()
             txtC = str(self.cbxRegGradoEstud.currentText())
             grado = txtC[0:-2].strip()
@@ -398,12 +470,11 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = pidG[1:-2]
         if pidG is not None:
-            if pidG !='o':
+            if pidG != 'o':
                 pidG = int(pidG)
-                listnm = self.conest.listar_estudiantes_nombre_asc_byIdGrado(pidG)
+                listnm = self.conest.listar_estudiantes_nombre_asc_byIdGrado(
+                    pidG)
                 self.cargar_Estudiantes_segun_grado_calificando(listnm)
-
-   
 
     def buscarEstudianteEnRegistroPorGrado(self, text):
         cbx = str(self.cbxVerEstudiantesDeRegEst.currentText())
@@ -412,7 +483,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = str(pidG[1:-2])
         if pidG is not None:
-            if pidG !='o':
+            if pidG != 'o':
                 pidG = int(pidG)
                 print(f'lis {pidG}')
                 tblOrder = self.conest.buscarEstudiante(text, pidG)
@@ -423,16 +494,16 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         seccion = gradosec[-1:]
         pidG = self.conm.listarGradoSeccionIdGrado(grado, seccion)
         pidG = pidG[1:-2]
-            
+
         if pidG is not None:
-            if pidG!='o':
+            if pidG != 'o':
                 list = self.conest.listar_estudiantes_segun_grado(pidG)
                 self.cargar_Estudiantes_segun_grado_calificando(list)
 
     def agregarEstudiante(self):
         # VALIDACION
         nombre = self.txtRegNomEstud.text()
-        if nombre.strip() !="":
+        if nombre.strip() != "":
             nie = self.txtRegNieEstud.text()
             txtC = str(self.cbxRegGradoEstud.currentText())
             grado = txtC[0:-2].strip()
@@ -450,11 +521,11 @@ class MainViewc(QMainWindow, Ui_MainWindow):
                 idEstudiante = int(idEstudiante[1:-2])
                 # obtener listado de materias del grado registrado
                 # liMaterias = self.conm.listar_idMaterias_segun_idGrado(pidG)
-                ciclo=1
-                if grado.lower()=="bachillerato":
-                    ciclo=2
-                if grado.lower()=="preparatoria":
-                    ciclo=0
+                ciclo = 1
+                if grado.lower() == "bachillerato":
+                    ciclo = 2
+                if grado.lower() == "preparatoria":
+                    ciclo = 0
                 liMaterias = self.conm.listar_idMaterias_segun_ciclo(ciclo)
                 i = 0
                 p = 0
@@ -482,9 +553,9 @@ class MainViewc(QMainWindow, Ui_MainWindow):
 # ***************************************************************************
     # OPERACIONES DE MATERIAS
 
+
     def regarcarMaterias(self):
         self.mostrar_materias_segun_grado()
-        
 
     def mostrar_materias_segun_grado(self):
         index = (self.tblListGradosRegMateria.selectionModel().currentIndex())
@@ -494,34 +565,34 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             self.cargar_tabla_materias_segun_grado(list)
 
     def agregarMateria(self):
-        
-        materia = self.txtRegMateria.text()
-        if materia.strip() !="":
-                ciclo = str(self.cbxRegMatGrado.currentIndex())
 
-                nMt = (materia, ciclo)
-                if self.conm.agregar_materia(nMt):
-                    print("materia agregada")
-                    #clear campo materia
-                    self.txtRegMateria.setText("")
-            
+        materia = self.txtRegMateria.text()
+        if materia.strip() != "":
+            ciclo = int(self.cbxRegMatGrado.currentIndex())+1
+
+            nMt = (materia, ciclo)
+            if self.conm.agregar_materia(nMt):
+                print("materia agregada")
+                # clear campo materia
+                self.txtRegMateria.setText("")
+
             # self.cargar_table_materias(self.cong.listar_grados())
 
     def selectMateriaAEditar(self):
         materia = (self.tblListMaterias.selectionModel().currentIndex())
         ciclo = (self.tblListGradosRegMateria.selectionModel().currentIndex())
-    
+
         idMateria = materia.sibling(materia.row(), 0).data()
         materia = materia.sibling(materia.row(), 1).data()
-        idCiclo=ciclo.sibling(ciclo.row(), 0).data()
+        idCiclo = ciclo.sibling(ciclo.row(), 0).data()
         if idCiclo is not None:
             idCiclo = int(idCiclo)
             print(idCiclo)
-        
+
             self.txtRegMateria.setText(materia)
             self.lblMateriaToEdit.setText(idMateria)
 
-            self.cbxRegMatGrado.setCurrentIndex(idCiclo)
+            self.cbxRegMatGrado.setCurrentIndex(idCiclo-1)
             self.btnCancelMateriaEdit.setEnabled(True)
             self.btnActualizarMateria.setEnabled(True)
             self.btnAgregarMateria.setEnabled(False)
@@ -533,14 +604,14 @@ class MainViewc(QMainWindow, Ui_MainWindow):
 
     def actualizarMateria(self):
         materia = self.txtRegMateria.text()
-        ciclo = str(self.cbxRegMatGrado.currentIndex())
-        
+        ciclo = int(self.cbxRegMatGrado.currentIndex())+1
+
         idMateria = self.lblMateriaToEdit.text()
         materia = (materia, ciclo)
         if self.conm.actualizar_materia(materia, idMateria):
             self.txtRegMateria.setText("")
             self.cargar_grados(self.cong.listar_grados())
-            
+
             self.cancelarEditarMateria()  # inac/activacion de botones
 
     def eliminarMateria(self):
@@ -552,12 +623,10 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             window.show()
             window.lblIdRegAeliminar.setText(str(idMateria))
             window.lblTablaaEliminar.setText('materia')
-        
 
 
 # ***************************************************************************
     # OPERACIONES DE GRADO
-
 
     def mostrar_estudiantes_segun_grado(self):
         # for ix in selected.indexes():
@@ -567,14 +636,14 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         idGrado = str(index.sibling(index.row(), 0).data())
         print(idGrado)
         if idGrado is not None:
-            idGrado=int(idGrado)
+            idGrado = int(idGrado)
             list = self.conest.listar_estudiantes_segun_grado(idGrado)
             self.cargar_Estudiantes_segun_grado(list)
 
     def buscarEstudiante(self, text):
         index = (self.tblListGrados.selectionModel().currentIndex())
         idGrado = index.sibling(index.row(), 0).data()
-        
+
         if idGrado is not None:
             tblOrder = self.conest.buscarEstudiante(text, idGrado)
             self.cargar_Estudiantes_segun_grado(tblOrder)
@@ -594,7 +663,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
     def actualizarGrado(self):
         ng = Grado()
         ng.grado = self.txtRegGrado.text()
-        if ng.grado.strip()!="":
+        if ng.grado.strip() != "":
             ng.seccion = self.cbxRegSeccion.currentText()
             idGrado = self.lblIdGradoEdit.text()
             grado = (ng.grado, ng.seccion)
@@ -609,7 +678,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
     def agregar_grado(self):
         ng = Grado()
         ng.grado = self.txtRegGrado.text()
-        if ng.grado.strip()!="":
+        if ng.grado.strip() != "":
             ng.seccion = self.cbxRegSeccion.currentText()
             grado = (ng.grado, ng.seccion)
             if self.cong.agregar_grado(grado):
@@ -622,15 +691,15 @@ class MainViewc(QMainWindow, Ui_MainWindow):
                 #     self.cong.listar_grados_combobox())
 
     def recargarAllCbxGrados(self):
-        ligrados=self.cong.listar_grados_combobox()
-        
+        ligrados = self.cong.listar_grados_combobox()
+
         self.cbxVerEstudiantesDeRegEst.clear()
         self.cbxRegGradoEstud.clear()
         self.cbxCalifGrados.clear()
         i = 0
         while i < len(ligrados):
             item = str(ligrados[i])
-            
+
             self.cbxRegGradoEstud.addItem(item[2:-3])
             self.cbxVerEstudiantesDeRegEst.addItem(item[2:-3])
             self.cbxCalifGrados.addItem(item[2:-3])
@@ -667,7 +736,7 @@ class MainViewc(QMainWindow, Ui_MainWindow):
         from controllers.ConfirmDelete_controller import ConfirmDeletec
         index = (self.tblListGrados.selectionModel().currentIndex())
         idGrado = index.sibling(index.row(), 0).data()
-        
+
         if idGrado is not None:
             window = ConfirmDeletec(self)
             window.show()
@@ -678,21 +747,17 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             self.tblListEstudRegGrados.setRowCount(0)
             # self.llenarCbxRegistroEstudiante(self.cong.listar_grados_combobox())
 
-    
-
 
 # ***************************************************************************
 # METODOS NECESARIOS DE VISTA
 
-
     def cargar_grados(self, ligrados):
         self.tblListGrados.setRowCount(len(ligrados))
-        
+
         for (index_row, row) in enumerate(ligrados):
             for (index_cell, cell) in enumerate(row):
                 self.tblListGrados.setItem(
                     index_row, index_cell, QTableWidgetItem(str(cell)))
-                
 
     def cargar_grados_registro_estudiante(self, ligrados):
         self.tblListGradosRegMateria.setRowCount(len(ligrados))
@@ -709,8 +774,6 @@ class MainViewc(QMainWindow, Ui_MainWindow):
             for (index_cell, cell) in enumerate(row):
                 self.tblListGradosRegMateria.setItem(
                     index_row, index_cell, QTableWidgetItem(str(cell)))
-
-  
 
     def llenarCbxRegistroMaterias(self, list):
         self.cbxCalifMateria.clear()

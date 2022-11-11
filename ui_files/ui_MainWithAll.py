@@ -216,7 +216,7 @@ class Ui_MainWindow(object):
         self.cbxActI.setMaximum(10.000000000000000)
         self.btnEliminarRegistroNota = QPushButton(self.tab_2)
         self.btnEliminarRegistroNota.setObjectName(u"btnEliminarRegistroNota")
-        self.btnEliminarRegistroNota.setGeometry(QRect(820, 380, 91, 28))
+        self.btnEliminarRegistroNota.setGeometry(QRect(820, 420, 101, 28))
         self.btnEliminarRegistroNota.setFont(font2)
         self.btnEliminarRegistroNota.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnEliminarRegistroNota.setStyleSheet(u"QPushButton\n"
@@ -325,7 +325,7 @@ class Ui_MainWindow(object):
 "")
         self.btnExportExcel = QPushButton(self.tab_2)
         self.btnExportExcel.setObjectName(u"btnExportExcel")
-        self.btnExportExcel.setGeometry(QRect(450, 230, 131, 28))
+        self.btnExportExcel.setGeometry(QRect(450, 230, 141, 28))
         self.btnExportExcel.setFont(font2)
         self.btnExportExcel.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnExportExcel.setStyleSheet(u"QPushButton\n"
@@ -345,7 +345,7 @@ class Ui_MainWindow(object):
 "")
         self.btnEditarCalifSelectEstudiante = QPushButton(self.tab_2)
         self.btnEditarCalifSelectEstudiante.setObjectName(u"btnEditarCalifSelectEstudiante")
-        self.btnEditarCalifSelectEstudiante.setGeometry(QRect(820, 340, 91, 28))
+        self.btnEditarCalifSelectEstudiante.setGeometry(QRect(820, 380, 101, 28))
         self.btnEditarCalifSelectEstudiante.setFont(font2)
         self.btnEditarCalifSelectEstudiante.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnEditarCalifSelectEstudiante.setStyleSheet(u"QPushButton\n"
@@ -365,7 +365,7 @@ class Ui_MainWindow(object):
 "")
         self.btnRefreshRegistroNotas = QPushButton(self.tab_2)
         self.btnRefreshRegistroNotas.setObjectName(u"btnRefreshRegistroNotas")
-        self.btnRefreshRegistroNotas.setGeometry(QRect(820, 420, 91, 28))
+        self.btnRefreshRegistroNotas.setGeometry(QRect(820, 460, 101, 28))
         self.btnRefreshRegistroNotas.setFont(font2)
         self.btnRefreshRegistroNotas.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnRefreshRegistroNotas.setStyleSheet(u"QPushButton\n"
@@ -387,10 +387,6 @@ class Ui_MainWindow(object):
         self.btnRefreshRegistroNotas.setIcon(icon2)
         self.btnRefreshRegistroNotas.setIconSize(QSize(16, 16))
         self.cbxVerNotasPeriodo = QComboBox(self.tab_2)
-        self.cbxVerNotasPeriodo.addItem("")
-        self.cbxVerNotasPeriodo.addItem("")
-        self.cbxVerNotasPeriodo.addItem("")
-        self.cbxVerNotasPeriodo.addItem("")
         self.cbxVerNotasPeriodo.setObjectName(u"cbxVerNotasPeriodo")
         self.cbxVerNotasPeriodo.setGeometry(QRect(20, 308, 161, 25))
         self.cbxVerNotasPeriodo.setFont(font3)
@@ -469,7 +465,7 @@ class Ui_MainWindow(object):
         self.btnBorrarDb = QPushButton(self.tab_2)
         self.btnBorrarDb.setObjectName(u"btnBorrarDb")
         self.btnBorrarDb.setEnabled(True)
-        self.btnBorrarDb.setGeometry(QRect(820, 520, 91, 61))
+        self.btnBorrarDb.setGeometry(QRect(820, 530, 91, 51))
         self.btnBorrarDb.setFont(font2)
         self.btnBorrarDb.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnBorrarDb.setStyleSheet(u"QPushButton\n"
@@ -496,6 +492,26 @@ class Ui_MainWindow(object):
         self.line.setMidLineWidth(4)
         self.line.setFrameShape(QFrame.HLine)
         self.line.setFrameShadow(QFrame.Sunken)
+        self.btnVerNotasEstudiante = QPushButton(self.tab_2)
+        self.btnVerNotasEstudiante.setObjectName(u"btnVerNotasEstudiante")
+        self.btnVerNotasEstudiante.setGeometry(QRect(820, 340, 101, 28))
+        self.btnVerNotasEstudiante.setFont(font2)
+        self.btnVerNotasEstudiante.setCursor(QCursor(Qt.PointingHandCursor))
+        self.btnVerNotasEstudiante.setStyleSheet(u"QPushButton\n"
+"{	\n"
+"	background:rgb(40,160,162);\n"
+"	border: 2px solid rgb(36,195,197);\n"
+"	border-radius:10px;\n"
+"	color:white;\n"
+"}\n"
+"QPushButton:pressed\n"
+"{\n"
+"	background-color: rgb(36,195,197);\n"
+"	border:2px solid rgb(40,160,162);\n"
+"}\n"
+"\n"
+"\n"
+"")
         icon4 = QIcon()
         icon4.addFile(u"../assets/img/notas.png", QSize(), QIcon.Normal, QIcon.Off)
         self.tabWidget.addTab(self.tab_2, icon4, "")
@@ -512,7 +528,7 @@ class Ui_MainWindow(object):
         self.tblListEstud.setHorizontalHeaderItem(2, __qtablewidgetitem12)
         self.tblListEstud.setObjectName(u"tblListEstud")
         self.tblListEstud.setEnabled(True)
-        self.tblListEstud.setGeometry(QRect(10, 290, 781, 301))
+        self.tblListEstud.setGeometry(QRect(10, 290, 791, 301))
         self.tblListEstud.setStyleSheet(u"QWidget{\n"
 "	background-color: white;\n"
 "	color: #000000;\n"
@@ -623,7 +639,7 @@ class Ui_MainWindow(object):
 "")
         self.btnEditSelectEstud = QPushButton(self.tab_3)
         self.btnEditSelectEstud.setObjectName(u"btnEditSelectEstud")
-        self.btnEditSelectEstud.setGeometry(QRect(820, 290, 90, 28))
+        self.btnEditSelectEstud.setGeometry(QRect(810, 290, 111, 28))
         self.btnEditSelectEstud.setFont(font2)
         self.btnEditSelectEstud.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnEditSelectEstud.setStyleSheet(u"QPushButton\n"
@@ -643,7 +659,7 @@ class Ui_MainWindow(object):
 "")
         self.btnEliminarEstud = QPushButton(self.tab_3)
         self.btnEliminarEstud.setObjectName(u"btnEliminarEstud")
-        self.btnEliminarEstud.setGeometry(QRect(820, 330, 91, 28))
+        self.btnEliminarEstud.setGeometry(QRect(810, 330, 111, 28))
         self.btnEliminarEstud.setFont(font2)
         self.btnEliminarEstud.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnEliminarEstud.setStyleSheet(u"QPushButton\n"
@@ -732,7 +748,7 @@ class Ui_MainWindow(object):
 "background-color: rgb(72, 72, 72);")
         self.btnRefreshEstudiantes = QPushButton(self.tab_3)
         self.btnRefreshEstudiantes.setObjectName(u"btnRefreshEstudiantes")
-        self.btnRefreshEstudiantes.setGeometry(QRect(820, 370, 91, 28))
+        self.btnRefreshEstudiantes.setGeometry(QRect(810, 370, 111, 28))
         self.btnRefreshEstudiantes.setFont(font2)
         self.btnRefreshEstudiantes.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnRefreshEstudiantes.setStyleSheet(u"QPushButton\n"
@@ -773,7 +789,7 @@ class Ui_MainWindow(object):
         self.tblListGrados.setHorizontalHeaderItem(2, __qtablewidgetitem15)
         self.tblListGrados.setObjectName(u"tblListGrados")
         self.tblListGrados.setEnabled(True)
-        self.tblListGrados.setGeometry(QRect(350, 90, 441, 161))
+        self.tblListGrados.setGeometry(QRect(350, 90, 451, 161))
         self.tblListGrados.setStyleSheet(u"QWidget{\n"
 "	background-color: white;\n"
 "	color: #000000;\n"
@@ -876,7 +892,7 @@ class Ui_MainWindow(object):
         self.pushButton_28.setIconSize(QSize(25, 25))
         self.btnGradoEdit = QPushButton(self.tab_4)
         self.btnGradoEdit.setObjectName(u"btnGradoEdit")
-        self.btnGradoEdit.setGeometry(QRect(820, 90, 90, 28))
+        self.btnGradoEdit.setGeometry(QRect(810, 90, 111, 28))
         self.btnGradoEdit.setFont(font2)
         self.btnGradoEdit.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnGradoEdit.setStyleSheet(u"QPushButton\n"
@@ -900,7 +916,7 @@ class Ui_MainWindow(object):
         self.label_28.setStyleSheet(u"color: rgb(255, 255, 255);")
         self.btnGradoEliminar = QPushButton(self.tab_4)
         self.btnGradoEliminar.setObjectName(u"btnGradoEliminar")
-        self.btnGradoEliminar.setGeometry(QRect(820, 130, 91, 28))
+        self.btnGradoEliminar.setGeometry(QRect(810, 130, 111, 28))
         self.btnGradoEliminar.setFont(font2)
         self.btnGradoEliminar.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnGradoEliminar.setStyleSheet(u"QPushButton\n"
@@ -1037,7 +1053,7 @@ class Ui_MainWindow(object):
         self.tblListEstudRegGrados.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.btnRefreshGrados = QPushButton(self.tab_4)
         self.btnRefreshGrados.setObjectName(u"btnRefreshGrados")
-        self.btnRefreshGrados.setGeometry(QRect(820, 170, 91, 28))
+        self.btnRefreshGrados.setGeometry(QRect(810, 170, 111, 28))
         self.btnRefreshGrados.setFont(font2)
         self.btnRefreshGrados.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnRefreshGrados.setStyleSheet(u"QPushButton\n"
@@ -1076,7 +1092,7 @@ class Ui_MainWindow(object):
         self.tblListMaterias.setHorizontalHeaderItem(1, __qtablewidgetitem20)
         self.tblListMaterias.setObjectName(u"tblListMaterias")
         self.tblListMaterias.setEnabled(True)
-        self.tblListMaterias.setGeometry(QRect(430, 285, 361, 311))
+        self.tblListMaterias.setGeometry(QRect(430, 285, 371, 311))
         self.tblListMaterias.setStyleSheet(u"QWidget{\n"
 "	background-color: white;\n"
 "	color: #000000;\n"
@@ -1157,7 +1173,7 @@ class Ui_MainWindow(object):
 "")
         self.btnMateriaEdit = QPushButton(self.tab)
         self.btnMateriaEdit.setObjectName(u"btnMateriaEdit")
-        self.btnMateriaEdit.setGeometry(QRect(820, 290, 90, 28))
+        self.btnMateriaEdit.setGeometry(QRect(810, 290, 111, 28))
         self.btnMateriaEdit.setFont(font2)
         self.btnMateriaEdit.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnMateriaEdit.setStyleSheet(u"QPushButton\n"
@@ -1183,7 +1199,7 @@ class Ui_MainWindow(object):
         self.label_27.setStyleSheet(u"color: rgb(255, 255, 255);")
         self.btnEliminarMateria = QPushButton(self.tab)
         self.btnEliminarMateria.setObjectName(u"btnEliminarMateria")
-        self.btnEliminarMateria.setGeometry(QRect(820, 330, 91, 28))
+        self.btnEliminarMateria.setGeometry(QRect(810, 330, 111, 28))
         self.btnEliminarMateria.setFont(font2)
         self.btnEliminarMateria.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnEliminarMateria.setStyleSheet(u"QPushButton\n"
@@ -1285,7 +1301,7 @@ class Ui_MainWindow(object):
         self.tblListGradosRegMateria.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.btnRefreshMaterias = QPushButton(self.tab)
         self.btnRefreshMaterias.setObjectName(u"btnRefreshMaterias")
-        self.btnRefreshMaterias.setGeometry(QRect(820, 370, 91, 28))
+        self.btnRefreshMaterias.setGeometry(QRect(810, 370, 111, 28))
         self.btnRefreshMaterias.setFont(font2)
         self.btnRefreshMaterias.setCursor(QCursor(Qt.PointingHandCursor))
         self.btnRefreshMaterias.setStyleSheet(u"QPushButton\n"
@@ -1334,7 +1350,7 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         self.tabWidget.setToolTip("")
 #endif // QT_CONFIG(tooltip)
-        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Periodo", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"Trimestre", None))
         self.txtCalifProfesor.setText("")
         self.txtCalifProfesor.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Juan Perez", None))
         self.btnActualizarNota.setText(QCoreApplication.translate("MainWindow", u"Actualizar", None))
@@ -1362,11 +1378,6 @@ class Ui_MainWindow(object):
         self.btnExportExcel.setText(QCoreApplication.translate("MainWindow", u"Exportar Excel", None))
         self.btnEditarCalifSelectEstudiante.setText(QCoreApplication.translate("MainWindow", u"Editar", None))
         self.btnRefreshRegistroNotas.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
-        self.cbxVerNotasPeriodo.setItemText(0, QCoreApplication.translate("MainWindow", u"I", None))
-        self.cbxVerNotasPeriodo.setItemText(1, QCoreApplication.translate("MainWindow", u"II", None))
-        self.cbxVerNotasPeriodo.setItemText(2, QCoreApplication.translate("MainWindow", u"III", None))
-        self.cbxVerNotasPeriodo.setItemText(3, QCoreApplication.translate("MainWindow", u"IIII", None))
-
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Ver Notas del Trimestre", None))
         ___qtablewidgetitem = self.tblListRegistroNotas.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("MainWindow", u"#", None));
@@ -1383,7 +1394,7 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem6 = self.tblListRegistroNotas.horizontalHeaderItem(6)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("MainWindow", u"(35%)", None));
         ___qtablewidgetitem7 = self.tblListRegistroNotas.horizontalHeaderItem(7)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Act III", None));
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("MainWindow", u"Examen", None));
         ___qtablewidgetitem8 = self.tblListRegistroNotas.horizontalHeaderItem(8)
         ___qtablewidgetitem8.setText(QCoreApplication.translate("MainWindow", u"(30%)", None));
         ___qtablewidgetitem9 = self.tblListRegistroNotas.horizontalHeaderItem(9)
@@ -1392,6 +1403,7 @@ class Ui_MainWindow(object):
         self.txtidCalificacion.setText("")
         self.btnBorrarDb.setText(QCoreApplication.translate("MainWindow", u"Borrar \n"
 " Datos", None))
+        self.btnVerNotasEstudiante.setText(QCoreApplication.translate("MainWindow", u"Ver notas", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), "")
         ___qtablewidgetitem10 = self.tblListEstud.horizontalHeaderItem(0)
         ___qtablewidgetitem10.setText(QCoreApplication.translate("MainWindow", u"#", None));

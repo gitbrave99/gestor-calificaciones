@@ -41,7 +41,6 @@ class ConEstudiante(Conexion):
                 cursor.close()
                 conn.close()
 
-
     def eliminar(self,id):
         conn = self.get_connection()
         sql = f"DELETE FROM estudiante WHERE id_estudiante = {id}"
@@ -62,7 +61,6 @@ class ConEstudiante(Conexion):
     def listar_estudiantes_segun_grado(self,idgrado):
         conn = self.get_connection()
         sql = f"SELECT * FROM estudiante WHERE id_grado={idgrado}"
-
         try:
             cursor = conn.cursor()
             cursor.execute(sql)
@@ -78,7 +76,6 @@ class ConEstudiante(Conexion):
     def listar_estudiantes(self):
         conn = self.get_connection()
         sql = "SELECT * FROM estudiante"
-
         try:
             cursor = conn.cursor()
             cursor.execute(sql)
@@ -90,6 +87,7 @@ class ConEstudiante(Conexion):
             if conn:
                 cursor.close()
                 conn.close()
+
     #OBTENER ULTIMO ESTUDIANTE INSERTADO
     def obtener_ultimo_estudiante_insertado(self):
         conn = self.get_connection()

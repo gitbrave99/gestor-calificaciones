@@ -1,4 +1,3 @@
-import time
 from PySide2.QtWidgets import QWidget
 from views.ConfirmDelte import Ui_Form
 from PySide2.QtCore import Qt
